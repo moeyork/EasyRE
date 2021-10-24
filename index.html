@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You know DFA is Easy</title>
+    <script src="re.js"></script>
+    <script src="fsm.js"></script>
+    <script src="viz.js"></script>
+    <script src="full.render.js"></script>
+</head>
+<body>
+    <div>
+        <p>Input RE:</p>
+        <input id="re-input" type="text">
+        <div id="re-parser"></div>
+        <div id="enfa-table"></div>
+        <div id="svg-enfa" style="width: 100%;"></div>
+        <div id="svg-dfa" style="width: 100%;"></div>
+        <p>Copyright © 2021 MaPl. All Rights Reserved</p>
+    </div>
+    <script src="util.js"></script>
+    <script>
+        let viz = new Viz()
+        REInput.addEventListener("input", event => {
+            console.time("Parse RE")
+            const inputValue = event.target.value
+            try {
+                const ast = re.parse(inputValue)
+                const alphabet = [...getAlphabet(ast).values()]
+                REParser.innerHTML =  "RE Parse successed<br>"
+                REParser.innerHTML += `∑ = ${printSet(alphabet)}<br>`
+                if(alphabet.length <= 0) {
+                    REParser.innerHTML += "Alphabet unsupported"
+                    ENFATable.innerHTML = ""
+                    SVGENFA.innerHTML = ""
+                    SVGDFA.innerHTML = ""
+                    return
+                }
+                const eNFA = new ENFA(ast)
+                // ENFATable.innerHTML = renderENFATable(eNFA.outputTable(), alphabet)
+                // console.log(eNFA.toDot())
+                viz.renderSVGElement(eNFA.toDot())
+                .then(function(element) {
+                    SVGENFA.innerHTML = ""
+                    SVGENFA.appendChild(element)
+                })
+                .catch(error => {
+                    viz = new Viz();
+                    console.error(error)
+                })
+                const dfa = new DFA(eNFA.outputTable(), eNFA._alphabet)
+                // console.table(dfa.outputTable())
+                console.log(dfa.toDot())
+                viz.renderSVGElement(dfa.toDot())
+                .then(function(element) {
+                    SVGDFA.innerHTML = ""
+                    SVGDFA.appendChild(element)
+                })
+                .catch(error => {
+                    viz = new Viz();
+                    console.error(error)
+                })
+            } catch (error) {
+                REParser.innerHTML = error.toString().split('\n').join('<br>')
+                ENFATable.innerHTML = ""
+                SVGENFA.innerHTML = ""
+                SVGDFA.innerHTML = ""
+            }
+            console.timeEnd("Parse RE")
+        })
+    </script>
+</body>
+</html>
