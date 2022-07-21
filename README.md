@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmoeyork%2FEasyRE.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmoeyork%2FEasyRE?ref=badge_shield)
+
 ﻿# EasyRE
 
 自用小程序。
@@ -17,3 +19,7 @@ group 		: "(" RE ")" ;
 any 		: "." ;
 char 		: CHAR ;
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmoeyork%2FEasyRE.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmoeyork%2FEasyRE?ref=badge_large)
